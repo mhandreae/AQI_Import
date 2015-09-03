@@ -5,7 +5,7 @@ output: pdf_document
 ---
 
 #Insurance status predicts antiemetic use 
-We investigate the Hypothesis that insurance status predicets antiemetic use the population in the Public Use File of the Anestehsia Quality Institute with electronic anesthesia records recording antiemetic use.
+We investigate the Hypothesis that insurance status predicets antiemetic use the population in the Public Use File of the Anestehsia Quality Institute with electronic anesthesia records recording antiemetic use controlling for procedure.
 
 
 
