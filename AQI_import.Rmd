@@ -394,6 +394,7 @@ myAQI_cpt<- data.frame(ond= ondansetron,
                        age_group = patient_age_group, 
                        sex = patient_sex,
                        
+                       cpt = cpt,
                        ASA = asaps,
                        duration = case_duration_minutes,
                        anes_type = primary_anesthesia_type,
