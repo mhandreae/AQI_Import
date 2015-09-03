@@ -3,8 +3,9 @@
 .Rhistory
 .RData
 .pdf
+<<<<<<< HEAD
 AQI_Import.Rproj
 AQI_import.html
 Data
 Figs
-myAQI_cpt.Rdata
+
