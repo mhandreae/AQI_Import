@@ -370,6 +370,16 @@ myNAs[nProv] <- sum(is.na(PUF$prov1))
 
 It would be great to control for individual provider behavior, to show variability among providers in their propensity to admister antiemetics contingent on insurance status. There are `r length(levels(PUF$prov1))` different *prov1* levels, I believe they are coding for individual providers. `r myNAs[nProv]` of the remaining cases do not have the *prov1*  recorded; 
 
+### Median Income of patient zip code
+
+```{r}
+IncomeSummary <- summary(PUF$Income_MedianR)
+class(PUF$Income_MedianR)
+myNAs[nIncome] <- sum(is.na(PUF$Income_MedianR))
+
+```
+
+*Income_MedianR* encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome]` NAs.
 
 # Clean AQI_cpt dataframe saved as Rdata
 
