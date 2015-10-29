@@ -374,12 +374,11 @@ It would be great to control for individual provider behavior, to show variabili
 
 ```{r}
 IncomeSummary <- summary(PUF$Income_MedianR)
-class(PUF$Income_MedianR)
-myNAs[nIncome] <- sum(is.na(PUF$Income_MedianR))
+myNAs[nIncome_Median] <- sum(is.na(PUF$Income_MedianR))
 
 ```
 
-*Income_MedianR* encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome]` NAs.
+*Income_MedianR*, an integer, encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome_Median]` NAs.
 
 # Clean AQI_cpt dataframe saved as Rdata
 
