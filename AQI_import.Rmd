@@ -350,11 +350,12 @@ myNAs[nASA_imputed] <- sum(is.na(PUF$asaps_imputed))
 ```{r}
 PUF$asaps <- 
   as.factor(PUF$asaps)
+levels(PUF$asaps)[7] <- NA # exclude the ASA 6
 levels(PUF$asaps)[1] <- NA
 myNAs[nASA] <- sum(is.na(PUF$asaps))
 ```
 
-It would make sense to try to control for *asaps* or *asaps_imputed*, (ASA Status, which indicates how sick a patient was, and only `r myNAs[nASA]` of the remaining cases do not have an ASA status recorded; so we exclude them, leaving us with `r dim(PUF)[1]` unique cases with also *asaps* as a predictor.
+It would make sense to try to control for *asaps* or *asaps_imputed*, (ASA Status, which indicates how sick a patient was, we should also exclude ASA status 6 (organ donars) and only `r myNAs[nASA]` of the remaining cases do not have an ASA status recorded; so we exclude them, leaving us with `r dim(PUF)[1]` unique cases with also *asaps* as a predictor.
 
 
 ### prov1
