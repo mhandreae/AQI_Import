@@ -19,7 +19,8 @@ require(knitr) # required to set options in Markdown R
 # set options
 opts_chunk$set(fig.width=6, fig.height=4, fig.path='Figs/',
                echo=FALSE, warning=FALSE, message=FALSE)
-setwd("C:/Users/Micheal/Dropbox/Professional/AQI/AQI_Import")
+# set working directory to source file location
+#setwd("C:/Users/Micheal/Dropbox/Professional/AQI/AQI_Import")
 ```
 
 # Import Data and generate clean data files
@@ -28,7 +29,7 @@ setwd("C:/Users/Micheal/Dropbox/Professional/AQI/AQI_Import")
 # run only once
 
 setwd("C:/Users/Micheal/Dropbox/Professional/AQI/Robert/Data/")
-PUF <- read.csv("PUF.csv")
+PUF <- read.csv("Data/PUF.csv")
 
 setwd("C:/Users/Micheal/Dropbox/Professional/AQI/AQI_Import/Data")
 save(PUF, file="PUF.Rdata")
@@ -39,7 +40,8 @@ rm(list = ls())
 
 ```{r}
 rm(list = ls())
-setwd("C:/Users/Micheal/Dropbox/Professional/AQI/AQI_Import")
+# set working directory to source file location
+#setwd("C:/Users/Micheal/Dropbox/Professional/AQI/AQI_Import")
 load("Data/PUF.Rdata")
 ```
 
