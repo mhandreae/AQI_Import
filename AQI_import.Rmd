@@ -378,7 +378,7 @@ myNAs[nIncome_Median] <- sum(is.na(PUF$Income_MedianR))
 
 ```
 
-*Income_MedianR*, an integer, encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome_Median]` NAs.
+*Income_MedianR*, an integer, encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome_Median]` NAs. We will scale the variable *Income_MedianR* to units of income of $10,000  to make the regression coefficient more interpretable. 5 correspondes therefore to a median income of $50,000 in the patients home zip code area.
 
 # Clean AQI_cpt dataframe saved as Rdata
 
@@ -399,7 +399,7 @@ myAQI_cpt<- data.frame(ond= ondansetron,
                        either = either,
                        
                        pay = Payment,
-                       income = Income_MedianR,
+                       income = Income_MedianR/ 10000, # scale to $10,000 income units
                        age = patient_age, 
                        age_group = patient_age_group, 
                        sex = patient_sex,
