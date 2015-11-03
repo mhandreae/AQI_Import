@@ -378,9 +378,26 @@ It would be great to control for individual provider behavior, to show variabili
 IncomeSummary <- summary(PUF$Income_MedianR)
 myNAs[nIncome_Median] <- sum(is.na(PUF$Income_MedianR))
 
+library(dplyr)
+library(knitr)
+
+
+hist(PUF$Income_MedianR, main = "Histogram of Median Income", xlab = "Median income in patients home zip code in $", breaks =40)
+
 ```
 
-*Income_MedianR*, an integer, encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome_Median]` NAs. We will scale the variable *Income_MedianR* to units of income of $10,000  to make the regression coefficient more interpretable. 5 correspondes therefore to a median income of $50,000 in the patients home zip code area.
+The above histogram show the distribution of median incomes in the patients home zip codes, used as a indicator of SES. *Income_MedianR*, an integer, encodes for the median income in the patient home address zipcode. Median Income is `r summary(PUF$Income_MedianR)[2]`, with an IQR [`r summary(PUF$Income_MedianR)[c(2,5)]`]. There are  `r myNAs[nIncome_Median]` NAs. We will scale the variable *Income_MedianR* to units of income of $100,000  to make the regression coefficient more interpretable. 1 correspondes therefore to a median income of $100,000 in the patients home zip code area. The median of the zip code income medians is `r median(PUF$Income_MedianR, na.rm= TRUE)`
+
+#### Deviding into median income quantile
+```{r}
+PUF$IncomeQ <- cut (PUF$Income_MedianR, 
+                     quantile(PUF$Income_MedianR, na.rm = TRUE),
+                     labels =c("very low","low", "middle", "high")
+  )
+```
+
+We break the data into four income quantiles with the cut points:
+`r quantile(PUF$Income_MedianR, na.rm = TRUE)`. 
 
 # Clean AQI_cpt dataframe saved as Rdata
 
@@ -401,7 +418,8 @@ myAQI_cpt<- data.frame(ond= ondansetron,
                        either = either,
                        
                        pay = Payment,
-                       income = Income_MedianR/ 10000, # scale to $10,000 income units
+                       income = Income_MedianR/ 100000, # scale to $100,000 income units
+                       incomeQ = IncomeQ, # income quantiles
                        age = patient_age, 
                        age_group = patient_age_group, 
                        sex = patient_sex,
