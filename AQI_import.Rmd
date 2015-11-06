@@ -413,10 +413,10 @@ iIncome_MedianR <- 76
 iPayment <- 78
 
 # make a list to call them in the loop
-ilist<- c(iPayment,
-          iIncome_MedianR,
-          iProvider,
+ilist<- c(iProvider,
           isurgicalCPT,
+          iPayment,
+          iIncome_MedianR,
           iASA,
           iAnes_type,
           iPatientSex,
@@ -460,10 +460,10 @@ for (i in 1:(n_i-2)) {
 
 # label table columns and rows
 
-colnames(mtable) <- rownames(mtable) <- c("Insurance",
-          "Income Median",
-          "Provider",
+colnames(mtable) <- rownames(mtable) <- c("Provider",
           "CPT",
+          "Insurance",
+          "Income Median",
           "ASA",
           "Anes_type",
           "Gender",
@@ -472,6 +472,7 @@ missingnesstable <- mtable
 save(missingnesstable, file = "Results/missingnesstable.Rdata")
 kable(mtable, caption = "Table of missing patterns. We tabulate in the diagonale the number of missing observations for ther variable; in the upper triagle of the table, the number of jointly observed and in the lower triangle the number of jointly missing observations for the corresponding variables." )
 ```
+
 
 
 # Clean AQI_cpt dataframe saved as Rdata
