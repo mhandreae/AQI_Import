@@ -399,6 +399,81 @@ PUF$IncomeQ <- cut (PUF$Income_MedianR,
 We break the data into four income quantiles with the cut points:
 `r quantile(PUF$Income_MedianR, na.rm = TRUE)`. 
 
+## Table of missing patterns
+
+```{r}
+# which position in the PUF datafram do the variable have
+iAge <- 14
+iPatientSex <-16
+iASA <- 17
+iAnes_type <- 28
+isurgicalCPT <- 29
+iProvider <- 62
+iIncome_MedianR <- 76
+iPayment <- 78
+
+# make a list to call them in the loop
+ilist<- c(iPayment,
+          iIncome_MedianR,
+          iProvider,
+          isurgicalCPT,
+          iASA,
+          iAnes_type,
+          iPatientSex,
+          iAge)
+
+# how many variables are there
+n_i <- length (ilist)
+
+# define dimensions for a table of missingness
+mtable <- matrix(rep(0,n_i^2), ncol=n_i)
+
+
+# for each variable fill the diagonal with the number of missing NAs
+for (d in 1:n_i) {  mtable[d,d] <- sum( is.na(PUF[,ilist[d] ] )) }
+
+for (i in 1:(n_i-2)) {
+  
+  # for each other variable
+  for (j in (i+1):(n_i)) {
+    # make a the joint missingness table
+    overlap <- table(is.na(PUF[,ilist[i] ]),
+                     is.na(PUF[,ilist[j] ]))
+
+    # put the number of units with both variables observed in upper triangle                   
+    mtable[i,j] <- overlap[1,1]
+    
+    # put the number of units with neither variables observed in lower triangle         
+    mtable[j,i] <- overlap[2,2]
+  }
+}
+
+# Do for last comparison i+1 and j= n_i
+    overlap <- table(is.na(PUF[,ilist[7] ]),
+                     is.na(PUF[,ilist[8] ]))
+
+    # put the number of units with both variables observed in upper triangle                   
+    mtable[(i+1),n_i] <- overlap[1,1]
+    
+    # put the number of units with neither variables observed in lower triangle         
+    mtable[n_i,(i+1)] <- overlap[2,2]
+
+# label table columns and rows
+
+colnames(mtable) <- rownames(mtable) <- c("Insurance",
+          "Income Median",
+          "Provider",
+          "CPT",
+          "ASA",
+          "Anes_type",
+          "Gender",
+          "Age")
+missingnesstable <- mtable
+save(missingnesstable, file = "Results/missingnesstable.Rdata")
+kable(mtable, caption = "Table of missing patterns. We tabulate in the diagonale the number of missing observations for ther variable; in the upper triagle of the table, the number of jointly observed and in the lower triangle the number of jointly missing observations for the corresponding variables." )
+```
+
+
 # Clean AQI_cpt dataframe saved as Rdata
 
 ```{r, eval=TRUE}
