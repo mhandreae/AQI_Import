@@ -502,7 +502,6 @@ myAQI_cpt<- data.frame(ond= ondansetron,
                        cpt = cpt,
                        ASA = asaps,
                        anes_type = primary_anesthesia_type,
-                       
                        practice = practice,
                        prov = prov1
                        )
