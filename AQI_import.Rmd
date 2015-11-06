@@ -403,7 +403,7 @@ We break the data into four income quantiles with the cut points:
 
 ```{r}
 # which position in the PUF datafram do the variable have
-iAge <- 14
+iAgeGroup <- 15
 iPatientSex <-16
 iASA <- 17
 iAnes_type <- 28
@@ -420,7 +420,7 @@ ilist<- c(iProvider,
           iASA,
           iAnes_type,
           iPatientSex,
-          iAge)
+          iAgeGroup)
 
 # how many variables are there
 n_i <- length (ilist)
@@ -467,12 +467,11 @@ colnames(mtable) <- rownames(mtable) <- c("Provider",
           "ASA",
           "Anes_type",
           "Gender",
-          "Age")
+          "Age Group")
 missingnesstable <- mtable
 save(missingnesstable, file = "Results/missingnesstable.Rdata")
 kable(mtable, caption = "Table of missing patterns. We tabulate in the diagonale the number of missing observations for ther variable; in the upper triagle of the table, the number of jointly observed and in the lower triangle the number of jointly missing observations for the corresponding variables." )
 ```
-
 
 
 # Clean AQI_cpt dataframe saved as Rdata
@@ -502,7 +501,6 @@ myAQI_cpt<- data.frame(ond= ondansetron,
                        
                        cpt = cpt,
                        ASA = asaps,
-                       duration = case_duration_minutes,
                        anes_type = primary_anesthesia_type,
                        
                        practice = practice,
@@ -514,9 +512,84 @@ str(myAQI_cpt)
 
 The dataset has dimension `r (dim.data.frame((myAQI_cpt)))`, before we limit to only complete cases.
 
+## Attrition flow diagram
+
+```{r}
+
+load("myAQI_cpt.Rdata")
+#counters of remaining observations and cases lost after removing variable
+nObservations <- rep(0, 10)
+nlost <- rep(0, 10)
+
+# Total number of cases in PUF
+nObservations[1] <- 8000000
+nlost[1] <- 0
+
+# Number of cases in customized dataset
+nObservations[2] <- 441645 # anesthesia cases in PUF
+nlost[2] <- 8000000 - 441645
+
+
+# Number of Complete cases after sequentially removing missing data for various variables 
+
+# prov
+nlost[3] <- sum(is.na(myAQI_cpt$prov))
+reducedAQI <- myAQI_cpt[complete.cases(myAQI_cpt$prov),]
+nObservations[3] <- dim(reducedAQI)[1]
+
+# cpt
+nlost[4] <- sum(is.na(reducedAQI$cpt))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$cpt),]
+nObservations[4] <- dim(reducedAQI)[1]
+
+# pay
+nlost[5] <- sum(is.na(reducedAQI$pay))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$pay),]
+nObservations[5] <- dim(reducedAQI)[1]
+
+# income
+nlost[6] <- sum(is.na(reducedAQI$income))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$income),]
+nObservations[6] <- dim(reducedAQI)[1]
+
+# ASA
+nlost[7] <- sum(is.na(reducedAQI$ASA))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$ASA),]
+nObservations[7] <- dim(reducedAQI)[1]
+
+# Anest_type
+nlost[8] <- sum(is.na(reducedAQI$anes_type))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$anes_type),]
+nObservations[8] <- dim(reducedAQI)[1]
+
+# Gender
+nlost[9] <- sum(is.na(reducedAQI$sex))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$sex),]
+nObservations[9] <- dim(reducedAQI)[1]
+
+# Age group
+nlost[10] <- sum(is.na(reducedAQI$age_group))
+reducedAQI <- reducedAQI[complete.cases(reducedAQI$age_group),]
+nObservations[10] <- dim(reducedAQI)[1]
+
+varnames <-  c("PUF",
+          "Customized Dataset",
+          "Complete Provider Data",
+          "Complete surgical CPT codes",
+          "Complete Insurance Information",
+          "Complete Income Median Information",
+          "Complete ASA Classification",
+          "Complete Anesthesia type data",
+          "Complete Gender Information",
+          "Complete Age Information")
+attritionTable <- data.frame(Dataset= varnames, lost=nlost, remaining = nObservations)
+save(attritionTable, file="results/AttritionTable.Rdata")
+kable(attritionTable, caption = "Flow diagram shoing remaining number of observations after sequentially removing cases with incomplete data on certain variables. The main loss occurs by limiting the Public User File to cases with antiemetic medication data.")
+```
+
 ## Complete case dataset ccAQI_cpt
 
 ```{r limitCompleteCases}
 ccAQI_cpt <- myAQI_cpt[complete.cases(myAQI_cpt),]
-save (ccAQI_cpt, file="myAQI_cpt.Rdata")
+save (ccAQI_cpt, myAQI_cpt, file="myAQI_cpt.Rdata")
 str(ccAQI_cpt)
